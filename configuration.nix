@@ -11,7 +11,18 @@
       (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos") 
     ];
   
-  home-manager.users.notation = { pkgs, ... }: { 
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    desktopManager = {
+      xterm.enable = true;
+    };
+    windowManager.xmonad = {
+      enable = true;
+    };
+  };
+  
+  home-manager.users.notation = { pkgs, ... }: {
     programs.git = {
       enable = true;
       userName = "Rune Nielsen";
@@ -52,6 +63,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+     # Standard
+     xclip
+     firefox
      wget 
      vim
      coreutils
@@ -67,7 +81,6 @@
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
-    pinentryFlavor = "gnome3";
   };
 
   # List services that you want to enable:
@@ -79,11 +92,6 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
-
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
 
@@ -92,6 +100,7 @@
      isNormalUser = true;
      extraGroups = [ "wheel" "video" "networkmanager" ]; # Enable ‘sudo’ for the user.
    };
+
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
